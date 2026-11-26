@@ -55,7 +55,7 @@ export default async (req) => {
   const cols = [], miss = [];
   list.forEach((t, i) => { if (series[i]) cols.push([t, series[i]]); else miss.push(t); });
   if (f) cols.push(['USDKRW', f]);
-  if (url.searchParams.get('debug') === '1') return new Response(JSON.stringify({ ms: Date.now() - T0.t, err: ERR, cols: cols.map(([k, m]) => [k, m.size]) }), { headers: { 'Content-Type': 'application/json' } });
+  if (url.searchParams.get('debug') === '1') return new Response(JSON.stringify({ raw: url.search, list, miss, ms: Date.now() - T0.t, err: ERR, cols: cols.map(([k, m]) => [k, m.size]) }), { headers: { 'Content-Type': 'application/json' } });
   if (!cols.length) return new Response('시세 출처에 연결하지 못했어요', { status: 502 });
   const dates = [...new Set(cols.flatMap(([, m]) => [...m.keys()]))].sort();
   const last = cols.map(() => null), lines = ['Date,' + cols.map(([k]) => k).join(',')];
