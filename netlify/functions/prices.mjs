@@ -1,8 +1,8 @@
 // 헬로 미스터마켓 · 시세 동기화 (/api/prices) — 키 없음
 // 미국: 나스닥 일별 종가 + 배당 반영(배당락일 기준 과거가 조정) + 현재가 / 한국: 네이버 일별 종가 / 환율: Frankfurter(ECB)
-// 최근 약 400일만 돌려줌 (그래프 이어 붙이기 · 52주 최저가 · 현재가용). 백테스팅은 앱에 내장된 장기 데이터를 그대로 씀.
+// 한 번에 최대 8종목 (앱이 여러 묶음으로 나눠 동시에 요청) · 최근 약 400일만 돌려줌 (그래프 이어 붙이기 · 52주 최저가 · 현재가용). 백테스팅은 앱에 내장된 장기 데이터를 그대로 씀.
 const KR_MAP = { KOFR: '449170' };
-const APP = ['SPY', 'QQQ', 'TQQQ', 'SOXL', 'SGOV', 'SCHD', 'JEPQ', 'XLV', 'XLF', 'XLE', 'XLI', 'KOFR', '069500'];
+const ETF = new Set(['SPY', 'QQQ', 'TQQQ', 'SOXL', 'SGOV', 'SCHD', 'JEPQ', 'XLV', 'XLF', 'XLE', 'XLI', 'VOO', 'VTI', 'IVV', 'TLT', 'IEF', 'SHY', 'BIL', 'GLD', 'IAU', 'SLV', 'DIA', 'IWM', 'VT', 'VXUS', 'EFA', 'EEM', 'JEPI', 'SPLG', 'QQQM', 'SMH', 'SOXX', 'XLK', 'XLY', 'XLP', 'XLU', 'XLB', 'XLRE', 'XLC', 'ARKK', 'UPRO', 'SQQQ', 'SPXL', 'BND', 'AGG', 'TMF', 'USD', 'SCHG', 'VUG', 'VIG', 'DGRO', 'COWZ']);
 const DAYS = 400;
 const UA = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36', Accept: 'application/json, text/plain, */*', Origin: 'https://www.nasdaq.com', Referer: 'https://www.nasdaq.com/' };
 const iso = (d) => d.toISOString().slice(0, 10);
@@ -12,23 +12,26 @@ async function j(url, ms = 6000, h = UA) { const r = await fetch(url, { headers:
 
 async function nasdaq(sym) {
   const from = iso(new Date(Date.now() - DAYS * 864e5));
-  for (const ac of ['etf', 'stocks']) {
+  const order = ETF.has(sym) ? ['etf', 'stocks'] : ['stocks', 'etf'];
+  for (const ac of order) {
+    const q = encodeURIComponent(sym);
+    // 일별 종가 · 현재가 · 배당을 동시에 요청 (서버 시간 제한 10초 안에 끝내려고)
+    const [h, inf, dv] = await Promise.all([
+      j(`https://api.nasdaq.com/api/quote/${q}/historical?assetclass=${ac}&fromdate=${from}&limit=9999`, 6500).catch(() => null),
+      j(`https://api.nasdaq.com/api/quote/${q}/info?assetclass=${ac}`, 5000).catch(() => null),
+      j(`https://api.nasdaq.com/api/quote/${q}/dividends?assetclass=${ac}`, 5000).catch(() => null),
+    ]);
+    const rows = h?.data?.tradesTable?.rows; if (!rows || !rows.length) continue;
+    const m = new Map(); rows.forEach((r) => { const d = mdy(r.date), c = num(r.close); if (d && c > 0) m.set(d, c); });
+    if (!m.size) continue;
+    try { const p = num(inf?.data?.primaryData?.lastSalePrice); const ts = String(inf?.data?.primaryData?.lastTradeTimestamp || ''); const dm = ts.match(/([A-Z][a-z]{2}) (\d{1,2}), (\d{4})/); if (p > 0 && dm) m.set(iso(new Date(`${dm[1]} ${dm[2]}, ${dm[3]} 12:00 UTC`)), p); } catch (e) { }
+    // 배당 반영: 배당락일 이전 가격을 (1 - 배당/전일종가)만큼 조정 → 야후 배당 조정 종가와 같은 방식
     try {
-      const h = await j(`https://api.nasdaq.com/api/quote/${encodeURIComponent(sym)}/historical?assetclass=${ac}&fromdate=${from}&limit=9999`);
-      const rows = h?.data?.tradesTable?.rows; if (!rows || !rows.length) continue;
-      const m = new Map(); rows.forEach((r) => { const d = mdy(r.date), c = num(r.close); if (d && c > 0) m.set(d, c); });
-      if (!m.size) continue;
-      // 현재가 (장중이면 오늘 값)
-      try { const inf = await j(`https://api.nasdaq.com/api/quote/${encodeURIComponent(sym)}/info?assetclass=${ac}`, 4000); const p = num(inf?.data?.primaryData?.lastSalePrice); const ts = String(inf?.data?.primaryData?.lastTradeTimestamp || ''); const dm = ts.match(/([A-Z][a-z]{2}) (\d{1,2}), (\d{4})/); if (p > 0 && dm) { const d = iso(new Date(`${dm[1]} ${dm[2]}, ${dm[3]} 12:00 UTC`)); m.set(d, p); } } catch (e) { }
-      // 배당 반영: 배당락일 이전 가격을 (1 - 배당/전일종가)만큼 조정 → 야후 배당 조정 종가와 같은 방식
-      try {
-        const dv = await j(`https://api.nasdaq.com/api/quote/${encodeURIComponent(sym)}/dividends?assetclass=${ac}`, 4000);
-        const ds = (dv?.data?.dividends?.rows || []).map((r) => [mdy(r.exOrEffDate), num(r.amount)]).filter(([d, a]) => d && a > 0 && d >= from);
-        const dates = [...m.keys()].sort();
-        ds.forEach(([ex, amt]) => { const prev = dates.filter((d) => d < ex).pop(); if (!prev) return; const f = 1 - amt / m.get(prev); if (!(f > 0.5 && f < 1)) return; dates.forEach((d) => { if (d < ex) m.set(d, m.get(d) * f); }); });
-      } catch (e) { }
-      return m;
+      const ds = (dv?.data?.dividends?.rows || []).map((r) => [mdy(r.exOrEffDate), num(r.amount)]).filter(([d, a]) => d && a > 0 && d >= from);
+      const dates = [...m.keys()].sort();
+      ds.forEach(([ex, amt]) => { const prev = dates.filter((d) => d < ex).pop(); if (!prev) return; const f = 1 - amt / m.get(prev); if (!(f > 0.5 && f < 1)) return; dates.forEach((d) => { if (d < ex) m.set(d, m.get(d) * f); }); });
     } catch (e) { }
+    return m;
   }
   return null;
 }
@@ -50,12 +53,12 @@ async function pool(items, n, fn) { const out = new Array(items.length); let i =
 export default async (req) => {
   const url = new URL(req.url);
   const extra = (url.searchParams.get('t') || '').toUpperCase().split(',').map((s) => s.trim()).filter((s) => /^[A-Z0-9][A-Z0-9.\-]{0,9}$/.test(s));
-  const list = [...new Set(APP.concat(extra))].slice(0, 40);
-  const [series, f] = await Promise.all([pool(list, 6, one), fx()]);
+  const list = [...new Set(extra)].slice(0, 8), wantFx = url.searchParams.get('fx') === '1';
+  const [series, f] = await Promise.all([pool(list, 8, one), wantFx ? fx() : null]);
   const cols = [], miss = [];
   list.forEach((t, i) => { if (series[i]) cols.push([t, series[i]]); else miss.push(t); });
   if (f) cols.push(['USDKRW', f]);
-  if (cols.length < 2) return new Response('시세 출처에 연결하지 못했어요', { status: 502 });
+  if (!cols.length) return new Response('시세 출처에 연결하지 못했어요', { status: 502 });
   const dates = [...new Set(cols.flatMap(([, m]) => [...m.keys()]))].sort();
   const last = cols.map(() => null), lines = ['Date,' + cols.map(([k]) => k).join(',')];
   dates.forEach((d) => { lines.push(d + ',' + cols.map(([, m], k) => { const v = m.get(d); if (v > 0) last[k] = v; return last[k] == null ? '' : +last[k].toFixed(4); }).join(',')); });
