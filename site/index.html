@@ -256,7 +256,7 @@ input[type=range]{accent-color:#4FA3FF}
 <span style="font-size: 12px; font-weight: 700; color: #FFE58A">{{setBkMsg}}</span>
 </sc-if></div>
 <div style="display: flex; flex-direction: column; gap: 2px; background: #16223A; border: 1px solid #26344F; border-radius: 16px; padding: 14px"><span style="font-size: 16px; font-weight: 800; padding-bottom: 6px">초기화</span><div style="display: flex; flex-direction: column; gap: 8px; padding-top: 4px"><button type="button" onClick="{{setResetTut}}" style="align-self: flex-start; min-height: 36px; padding: 0 12px; border-radius: 9px; border: 1px solid #8A4A4A; background: transparent; color: #FF9B7A; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer">{{setResetTutLabel}}</button><button type="button" onClick="{{setResetShop}}" style="align-self: flex-start; min-height: 36px; padding: 0 12px; border-radius: 9px; border: 1px solid #8A4A4A; background: transparent; color: #FF9B7A; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer">{{setResetShopLabel}}</button><button type="button" onClick="{{setResetPh}}" style="align-self: flex-start; min-height: 36px; padding: 0 12px; border-radius: 9px; border: 1px solid #8A4A4A; background: transparent; color: #FF9B7A; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer">{{setResetPhLabel}}</button><button type="button" onClick="{{setResetAll}}" style="align-self: flex-start; min-height: 36px; padding: 0 12px; border-radius: 9px; border: 1px solid #8A4A4A; background: transparent; color: #FF9B7A; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer">{{setResetAllLabel}}</button><span style="font-size: 12px; font-weight: 700; color: #FFE58A">{{setMsg}}</span><span style="font-size: 11px; color: #8393AE">초기화는 되돌릴 수 없어요. 먼저 백업 코드를 복사해 두면 안전해요.</span></div></div>
-<div style="display: flex; flex-direction: column; gap: 2px; background: #16223A; border: 1px solid #26344F; border-radius: 16px; padding: 14px"><span style="font-size: 16px; font-weight: 800; padding-bottom: 6px">앱 정보</span><button type="button" onClick="{{setTour}}" style="align-self: flex-start; min-height: 36px; padding: 0 14px; border-radius: 9px; border: 1px solid #C49BFF; background: transparent; color: #C49BFF; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer">🧭 3분 앱 둘러보기 다시 보기</button><span style="font-size: 12px; color: #9AA8BF; line-height: 1.7; padding-top: 8px">헬로 미스터마켓 · 성균관대 핀테크 MBA 창의적 종합설계 · 김지현 (송매미)<br>시세: 야후 파이낸스 일별 배당 조정 종가, 실러 S&amp;P 월별 데이터(1871~), FRED 환율, Alpha Vantage(연결 시)<br>모든 숫자는 과거 데이터로 계산한 교육용 시뮬레이션이며 투자 권유가 아닙니다.<br><br>© 2026 김지현 (송매미). All rights reserved.<br>앱의 화면 구성, 코드, 캐릭터(송매미 · 곤충 카드), 문구의 무단 복제 · 배포 · 상업적 이용을 금합니다.</span></div>
+<div style="display: flex; flex-direction: column; gap: 2px; background: #16223A; border: 1px solid #26344F; border-radius: 16px; padding: 14px"><span style="font-size: 16px; font-weight: 800; padding-bottom: 6px">앱 정보</span><button type="button" onClick="{{setTour}}" style="align-self: flex-start; min-height: 36px; padding: 0 14px; border-radius: 9px; border: 1px solid #C49BFF; background: transparent; color: #C49BFF; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer">🧭 3분 앱 둘러보기 다시 보기</button><span style="font-size: 12px; color: #9AA8BF; line-height: 1.7; padding-top: 8px">헬로 미스터마켓 · 성균관대 핀테크 MBA 창의적 종합설계 · 김지현 (송매미)<br>시세: 야후 파이낸스 일별 배당 조정 종가(내장), 나스닥 · 네이버(동기화), 실러 S&amp;P 월별 데이터(1871~), FRED 환율, Alpha Vantage(연결 시)<br>모든 숫자는 과거 데이터로 계산한 교육용 시뮬레이션이며 투자 권유가 아닙니다.<br><br>© 2026 김지현 (송매미). All rights reserved.<br>앱의 화면 구성, 코드, 캐릭터(송매미 · 곤충 카드), 문구의 무단 복제 · 배포 · 상업적 이용을 금합니다.</span></div>
 </section>
 </sc-if>
 <sc-if value="{{isCycle}}" hint-placeholder-val="{{ false }}">
@@ -269,7 +269,7 @@ input[type=range]{accent-color:#4FA3FF}
 <sc-if value="{{mcHas}}" hint-placeholder-val="{{ true }}">
 <sc-for list="{{mcRows}}" as="mr" hint-placeholder-count="10"><div style="display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; padding: 7px 0; border-top: 1px solid #1E2A44"><span style="font-size: 13px; font-weight: 700">{{mr.n}}</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 700; text-align: right">{{mr.v}}</span><span style="font-size: 11px; color: {{mr.c}}">{{mr.note}}</span><span style="font-size: 11px; color: #9AA8BF; text-align: right">{{mr.ch}}</span></div></sc-for>
 <sc-if value="{{mcHintOn}}" hint-placeholder-val="{{ false }}"><div style="display: flex; gap: 8px; align-items: flex-start; background: #FFFDF6; color: #1B2A44; border: 3px solid #1B2A44; border-radius: 12px; padding: 8px 10px; box-shadow: 3px 3px 0 #1B2A44"><img src="{{__a_feaf2288d6770e7df3dad2a29278ff40}}" alt="" style="width: 32px; height: 32px; border-radius: 50%"></img><div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; font-weight: 700; line-height: 1.5">{{mcHint}}</span><button type="button" onClick="{{mcPick}}" style="align-self: flex-start; min-height: 32px; padding: 0 12px; border-radius: 8px; border: 2px solid #1B2A44; background: #FFE58A; color: #1B2A44; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer">{{mcPickLabel}}</button></div></div></sc-if>
-<span style="font-size: 11px; color: #8393AE; line-height: 1.5">{{mcAsof}} · 출처: FRED(미 연준 통계), 야후 파이낸스(VIX), multpl(CAPE). 변화는 약 3개월 전 대비. 판단의 참고 자료일 뿐 투자 권유가 아니에요.</span>
+<span style="font-size: 11px; color: #8393AE; line-height: 1.5">{{mcAsof}} · 출처: 미 재무부(국채 금리), FRED(미 연준 통계), CBOE(VIX), multpl(CAPE). 변화는 약 3개월 전 대비. 판단의 참고 자료일 뿐 투자 권유가 아니에요.</span>
 </sc-if>
 <sc-if value="{{mcNone}}" hint-placeholder-val="{{ false }}"><span style="font-size: 12px; color: #C3CDDD">위 버튼을 누르면 금리 · 물가 · 실업률 · 신용 스프레드 · VIX · CAPE를 받아와요.</span></sc-if>
 </div>
@@ -3789,7 +3789,7 @@ class Component extends DCLogic {
     const G = '#8FD3B0', Y = '#F3CF85', R = '#FF9B7A', N = '#9AA8BF';
     const rows = [];
     const add = (k, n, u, note, c) => { const o = M[k]; if (!o) return; rows.push({ n: n, v: f2(o.v) + u, ch: ch(o, u === '%' ? '%p' : u), note: note(o), c: c(o) }); };
-    add('fed', '미국 기준금리 (상단)', '%', (o) => o.p12 != null && o.v < o.p12 ? '1년 전보다 낮아짐 · 인하 사이클' : o.p12 != null && o.v > o.p12 ? '1년 전보다 높아짐 · 인상 사이클' : '1년째 비슷', () => N);
+    add('fed', J && J.src && J.src.fed === 'nyfed-effr' ? '미국 연방기금 실효금리' : '미국 기준금리 (상단)', '%', (o) => o.p12 != null && o.v < o.p12 ? '1년 전보다 낮아짐 · 인하 사이클' : o.p12 != null && o.v > o.p12 ? '1년 전보다 높아짐 · 인상 사이클' : '1년째 비슷', () => N);
     add('10y', '미국 10년물 금리', '%', (o) => o.v >= 5 ? '5% 이상 · 주식에 부담' : o.v >= 4 ? '높은 편' : '보통', (o) => (o.v >= 5 ? R : o.v >= 4 ? Y : G));
     add('2y', '미국 2년물 금리', '%', () => '기준금리 기대를 반영', () => N);
     add('spread', '장단기 금리차 (10년-2년)', '%p', (o) => o.v < 0 ? '역전 · 침체 경고등' : o.v < 0.3 ? '거의 평평 · 주의' : '정상 (우상향)', (o) => (o.v < 0 ? R : o.v < 0.3 ? Y : G));
@@ -3820,14 +3820,22 @@ class Component extends DCLogic {
   pxSyncAgo() { const t = this.pxSyncT(); if (!t) return ''; const m = Math.round((Date.now() - t) / 60000); return m < 1 ? '방금' : m < 60 ? m + '분 전' : m < 1440 ? Math.round(m / 60) + '시간 전' : Math.round(m / 1440) + '일 전'; }
   pxSyncTickers() { this.shopLoad(); this.tLoad(); this.vLoad(); const t = []; const add = (x) => { x = String(x || '').trim().toUpperCase(); if (x && /^[A-Z0-9][A-Z0-9.\-]{0,9}$/.test(x) && t.indexOf(x) < 0) t.push(x); }; (this.state.shop.rows || []).forEach((r) => add(r.t)); (this.state.tenL.list || []).forEach((x) => add(x.tk)); this.vTickers().forEach(add); return t; }
   pxSync(auto) {
-    if (this._pxSyncBusy) return; this._pxSyncBusy = true; this.setState({ pxSyncing: true, pxSyncMsg: auto ? '' : '야후 파이낸스에서 시세를 받아오는 중이에요…' });
+    if (this._pxSyncBusy) return; this._pxSyncBusy = true; this.setState({ pxSyncing: true, pxSyncMsg: auto ? '' : '시세를 받아오는 중이에요…' });
     const done = (msg) => { this._pxSyncBusy = false; this.setState({ pxSyncing: false, pxSyncMsg: msg }); };
     let tk = []; try { tk = this.pxSyncTickers(); } catch (e) { }
     this.mcSync();
-    fetch('/api/prices?t=' + encodeURIComponent(tk.join(',')), { cache: 'no-store' }).then((r) => { if (!r.ok) throw new Error('http ' + r.status); const miss = r.headers.get('X-HMM-Missing') || ''; return r.text().then((txt) => [txt, miss]); }).then(([txt, miss]) => {
+    const all = ['SPY', 'QQQ', 'TQQQ', 'SOXL', 'SGOV', 'SCHD', 'JEPQ', 'XLV', 'XLF', 'XLE', 'XLI', 'KOFR', '069500']; tk.forEach((x) => { if (all.indexOf(x) < 0) all.push(x); });
+    const groups = []; for (let i = 0; i < all.length; i += 5) groups.push(all.slice(i, i + 5));
+    Promise.all(groups.map((g, gi) => fetch('/api/prices?s=' + encodeURIComponent(g.join(',')) + (gi === 0 ? '&fx=1' : ''), { cache: 'no-store' }).then((r) => (r.ok ? r.text().then((t) => [t, r.headers.get('X-HMM-Missing') || '']) : ['', g.join(',')])).catch(() => ['', g.join(',')]))).then((parts) => {
+      const cols = [], byDate = {}, miss = [];
+      parts.forEach(([t, m]) => { if (m) miss.push(m); if (!t) return; const L = t.replace(/^\uFEFF/, '').trim().split(/\r?\n/); const H = L[0].split(','); H.slice(1).forEach((h) => { if (cols.indexOf(h) < 0) cols.push(h); }); L.slice(1).forEach((ln) => { const c = ln.split(','), d = c[0]; byDate[d] = byDate[d] || {}; H.slice(1).forEach((h, i) => { if (c[i + 1] !== '') byDate[d][h] = c[i + 1]; }); }); });
+      if (!cols.length || cols.indexOf('SPY') < 0) throw new Error('no data');
+      const last = {}, lines = ['Date,' + cols.join(',')]; Object.keys(byDate).sort().forEach((d) => { lines.push(d + ',' + cols.map((h) => { if (byDate[d][h] != null) last[h] = byDate[d][h]; return last[h] == null ? '' : last[h]; }).join(',')); });
+      return [lines.join('\n') + '\n', miss.filter(Boolean).join(',')];
+    }).then(([txt, miss]) => {
       try { window.localStorage.setItem('hmm_px_sync', String(Date.now())); } catch (e) { }
-      const msg = this.pxBuild(txt, 'live-sync.csv'); if (!auto) this.sfx('coin');
-      done('✓ ' + this.pxSyncLastTxt() + ' 동기화 · ' + msg.replace(/^✓\s*/, '') + (miss ? ' · 못 찾은 종목: ' + miss : ''));
+      const msg = this.pxBuild(txt, 'live-sync.csv', { noBt: true }); if (!auto) this.sfx('coin');
+      done('✓ ' + this.pxSyncLastTxt() + ' 동기화 · ' + msg.replace(/^✓\s*/, '').replace(' · 백테스팅 반영', '') + (miss ? ' · 못 찾은 종목: ' + miss : ''));
     }).catch(() => done(auto ? '' : '시세 서버에 연결하지 못했어요. 잠시 후 다시 눌러 주세요. 계속 안 되면 맥북 시세 파일로 올려 주세요.'));
   }
   pxSyncAuto() { if (!this.pxSyncAvail() || window.__hmmAutoSync) return; window.__hmmAutoSync = 1; setTimeout(() => { if (Date.now() - this.pxSyncT() < 3600e3) return; this.pxSync(true); }, 1200); }
@@ -3838,14 +3846,14 @@ class Component extends DCLogic {
     rd.onload = () => { const text = String(rd.result || ''); const msg = this.pxBuild(text, f.name); this.setState({ pxMsg: msg }); };
     rd.readAsText(f, 'utf-8'); try { e.target.value = ''; } catch (err) { }
   }
-  pxBuild(text, name) {
+  pxBuild(text, name, opt) {
     const g = this.impCsvGrid(text); if (!g.length) return '파일이 비어 있어요.';
     const H = g[0].map((x) => String(x).trim().replace(/^\uFEFF/, '').toUpperCase()), col = (k) => H.indexOf(k);
     const di = col('DATE'); if (di < 0) return '첫 줄에 Date 열이 없어요. 맥북에서 만든 price-history.csv인지 확인해 주세요.';
     const rows = g.slice(1).map((r) => ({ d: parseInt(String(r[di] || '').slice(0, 10).replace(/-/g, ''), 10), r: r })).filter((x) => x.d > 19000000).sort((a, b) => a.d - b.d);
     const num = (row, k) => { const i = col(k); if (i < 0) return null; const v = parseFloat(String(row.r[i] || '').replace(/,/g, '')); return isFinite(v) && v > 0 ? v : null; };
     // backtest + shop prices from the same file
-    const p = this.btParse(text); if (p) { this._ph = p; this._phName = name; this._btMemo = null; try { window.localStorage.setItem('hmm_ph_v1', text); window.localStorage.setItem('hmm_ph_name', name); } catch (er) { } }
+    const p = opt && opt.noBt ? null : this.btParse(text); if (p) { this._ph = p; this._phName = name; this._btMemo = null; try { window.localStorage.setItem('hmm_ph_v1', text); window.localStorage.setItem('hmm_ph_name', name); } catch (er) { } }
     const lastRow = rows[rows.length - 1]; let nShop = 0;
     if (lastRow) { this.shopLoad(); const rows2 = this.state.shop.rows.map((r) => { const k = (r.t || '').trim().toUpperCase(); const v = num(lastRow, k) || num(lastRow, k.replace('.', '-')); if (k && v) { nShop++; return Object.assign({}, r, { p: String(r.c === 'KRW' ? Math.round(v) : Math.round(v * 100) / 100) }); } return r; }); this.shopSet({ rows: rows2 }); }
     const nTen = lastRow ? this.tenPriceUpdate((k) => num(lastRow, k), String(lastRow.d).replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')) : 0;
