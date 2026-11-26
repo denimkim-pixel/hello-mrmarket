@@ -263,6 +263,17 @@ input[type=range]{accent-color:#4FA3FF}
 <section aria-label="시장 사이클" style="display: flex; flex-direction: column; gap: 12px; max-width: 900px; width: 100%; margin: 0 auto; padding-top: 4px">
 <div style="display: flex; flex-direction: column; gap: 2px"><h1 style="margin: 0; font-size: 22px; font-weight: 800">🧭 시장 사이클</h1><span style="font-size: 12px; color: #9AA8BF">지금 시장은 어디쯤일까? 예측이 아니라 대비를 위해 보는 곳</span></div>
 <div role="tablist" aria-label="시장 사이클 도구" style="display: flex; gap: 4px; overflow-x: auto; padding-bottom: 2px"><sc-for list="{{cycTabs}}" as="ct" hint-placeholder-count="6"><button type="button" role="tab" onClick="{{ct.pick}}" style="flex: 0 0 auto; min-height: 36px; padding: 0 12px; border-radius: 18px; border: 1px solid #3A6F66; background: {{ct.bg}}; color: {{ct.fg}}; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap">{{ct.name}}</button></sc-for></div>
+<sc-if value="{{mcShow}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 8px; background: #16223A; border: 1px solid #2B4A70; border-radius: 16px; padding: 14px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap"><span style="font-size: 16px; font-weight: 800">📡 오늘의 경제지표</span><button type="button" onClick="{{pxSyncGo}}" style="min-height: 34px; padding: 0 12px; border-radius: 9px; border: 1px solid #FFE58A; background: transparent; color: #FFE58A; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer">{{mcBtn}}</button></div>
+<sc-if value="{{mcHas}}" hint-placeholder-val="{{ true }}">
+<sc-for list="{{mcRows}}" as="mr" hint-placeholder-count="10"><div style="display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; padding: 7px 0; border-top: 1px solid #1E2A44"><span style="font-size: 13px; font-weight: 700">{{mr.n}}</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 700; text-align: right">{{mr.v}}</span><span style="font-size: 11px; color: {{mr.c}}">{{mr.note}}</span><span style="font-size: 11px; color: #9AA8BF; text-align: right">{{mr.ch}}</span></div></sc-for>
+<sc-if value="{{mcHintOn}}" hint-placeholder-val="{{ false }}"><div style="display: flex; gap: 8px; align-items: flex-start; background: #FFFDF6; color: #1B2A44; border: 3px solid #1B2A44; border-radius: 12px; padding: 8px 10px; box-shadow: 3px 3px 0 #1B2A44"><img src="{{__a_feaf2288d6770e7df3dad2a29278ff40}}" alt="" style="width: 32px; height: 32px; border-radius: 50%"></img><div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; font-weight: 700; line-height: 1.5">{{mcHint}}</span><button type="button" onClick="{{mcPick}}" style="align-self: flex-start; min-height: 32px; padding: 0 12px; border-radius: 8px; border: 2px solid #1B2A44; background: #FFE58A; color: #1B2A44; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer">{{mcPickLabel}}</button></div></div></sc-if>
+<span style="font-size: 11px; color: #8393AE; line-height: 1.5">{{mcAsof}} · 출처: FRED(미 연준 통계), 야후 파이낸스(VIX), multpl(CAPE). 변화는 약 3개월 전 대비. 판단의 참고 자료일 뿐 투자 권유가 아니에요.</span>
+</sc-if>
+<sc-if value="{{mcNone}}" hint-placeholder-val="{{ false }}"><span style="font-size: 12px; color: #C3CDDD">위 버튼을 누르면 금리 · 물가 · 실업률 · 신용 스프레드 · VIX · CAPE를 받아와요.</span></sc-if>
+</div>
+</sc-if>
 <sc-if value="{{cySum}}" hint-placeholder-val="{{ true }}">
 <div style="display: flex; flex-direction: column; gap: 10px; background: #16223A; border: 1px solid #26344F; border-radius: 16px; padding: 14px">
 <span style="font-size: 16px; font-weight: 800">종합 판단</span>
@@ -3768,6 +3779,40 @@ class Component extends DCLogic {
     };
     rd.readAsText(f, 'utf-8'); try { e.target.value = ''; } catch (err) { }
   }
+  // ================= 경제지표 동기화 (/api/macro) =================
+  mcGet() { try { const r = window.localStorage.getItem('hmm_macro'); return r ? JSON.parse(r) : null; } catch (e) { return null; } }
+  mcSync() { fetch('/api/macro', { cache: 'no-store' }).then((r) => { if (!r.ok) throw 0; return r.json(); }).then((j) => { if (!j || !j.m) return; try { window.localStorage.setItem('hmm_macro', JSON.stringify(j)); } catch (e) { } if (j.m.cape && j.m.cape.v > 0) { this.cycLoad(); this.cycSet({ cape: j.m.cape.v.toFixed(1) }); } this.setState({ mcT: Date.now() }); }).catch(() => { }); }
+  mcVals(curTab) {
+    const on = this.pxSyncAvail(), J = this.mcGet(), M = (J && J.m) || {}, has = Object.keys(M).length > 0;
+    const f2 = (x) => (x == null ? '—' : (+x).toFixed(2)), sg = (x) => (x > 0 ? '+' : '') + x.toFixed(2);
+    const ch = (o, u) => (o && o.p3 != null ? (o.v > o.p3 + 0.005 ? '▲ ' : o.v < o.p3 - 0.005 ? '▼ ' : '― ') + sg(o.v - o.p3) + u : '');
+    const G = '#8FD3B0', Y = '#F3CF85', R = '#FF9B7A', N = '#9AA8BF';
+    const rows = [];
+    const add = (k, n, u, note, c) => { const o = M[k]; if (!o) return; rows.push({ n: n, v: f2(o.v) + u, ch: ch(o, u === '%' ? '%p' : u), note: note(o), c: c(o) }); };
+    add('fed', '미국 기준금리 (상단)', '%', (o) => o.p12 != null && o.v < o.p12 ? '1년 전보다 낮아짐 · 인하 사이클' : o.p12 != null && o.v > o.p12 ? '1년 전보다 높아짐 · 인상 사이클' : '1년째 비슷', () => N);
+    add('10y', '미국 10년물 금리', '%', (o) => o.v >= 5 ? '5% 이상 · 주식에 부담' : o.v >= 4 ? '높은 편' : '보통', (o) => (o.v >= 5 ? R : o.v >= 4 ? Y : G));
+    add('2y', '미국 2년물 금리', '%', () => '기준금리 기대를 반영', () => N);
+    add('spread', '장단기 금리차 (10년-2년)', '%p', (o) => o.v < 0 ? '역전 · 침체 경고등' : o.v < 0.3 ? '거의 평평 · 주의' : '정상 (우상향)', (o) => (o.v < 0 ? R : o.v < 0.3 ? Y : G));
+    add('cpi', 'CPI 물가 (전년비)', '%', (o) => o.v >= 3.5 ? '높음 · 금리 인하 어려움' : o.v >= 2.5 ? '목표(2%)보다 높음' : '목표 근처', (o) => (o.v >= 3.5 ? R : o.v >= 2.5 ? Y : G));
+    add('core', '근원 CPI (식품·에너지 제외)', '%', (o) => o.v >= 3 ? '끈적한 물가' : '안정 중', (o) => (o.v >= 3 ? Y : G));
+    add('unrate', '실업률', '%', (o) => o.p3 != null && o.v - o.p3 >= 0.3 ? '빠르게 오르는 중 · 경기 둔화' : '안정적', (o) => (o.p3 != null && o.v - o.p3 >= 0.3 ? R : G));
+    add('sahm', '삼의 법칙 (침체 신호)', '', (o) => o.v >= 0.5 ? '0.5 이상 · 침체 신호 켜짐' : o.v >= 0.3 ? '0.3 이상 · 주의' : '꺼짐', (o) => (o.v >= 0.5 ? R : o.v >= 0.3 ? Y : G));
+    add('hy', '하이일드 스프레드', '%p', (o) => o.v < 3 ? '아주 좁음 · 신용 느슨 (막스: 탐욕 쪽)' : o.v < 5 ? '보통' : '넓음 · 신용 긴장 (공포 쪽)', (o) => (o.v < 3 ? Y : o.v < 5 ? G : R));
+    add('vix', 'VIX 공포지수', '', (o) => o.v < 15 ? '아주 평온 · 방심 주의' : o.v < 25 ? '보통' : o.v < 35 ? '불안' : '공포 · 패닉', (o) => (o.v < 15 ? Y : o.v < 25 ? G : R));
+    if (M.cape) rows.push({ n: '실러 CAPE', v: M.cape.v.toFixed(1) + '배', ch: '', note: M.cape.v >= 30 ? '역사적으로 비싼 구간 (평균 약 17)' : M.cape.v >= 25 ? '비쌈' : '보통 이하', c: M.cape.v >= 30 ? R : M.cape.v >= 25 ? Y : G });
+    let growth = '', infl = '';
+    if (M.unrate && M.unrate.p3 != null) growth = (M.unrate.v - M.unrate.p3 >= 0.2 || (M.sahm && M.sahm.v >= 0.3)) ? 'down' : 'up';
+    if (M.cpi && M.cpi.p3 != null) infl = M.cpi.v - M.cpi.p3 > 0.1 ? 'up' : M.cpi.v - M.cpi.p3 < -0.1 ? 'down' : (M.core && M.core.p3 != null && M.core.v > M.core.p3 ? 'up' : 'down');
+    const SEA = { 'up-down': '봄 · 성장↑ 물가↓', 'up-up': '여름 · 성장↑ 물가↑', 'down-up': '가을 · 성장↓ 물가↑', 'down-down': '겨울 · 성장↓ 물가↓' }, key = growth && infl ? growth + '-' + infl : '';
+    const S = this.state.cyc || {}, same = key && S.growth === growth && S.infl === infl;
+    const at = J && J.asof ? new Date(J.asof) : null;
+    return {
+      mcShow: on && curTab === 'sum', mcHas: has, mcNone: !has, mcRows: rows, mcBtn: this.state.pxSyncing ? '⏳ 받는 중…' : '🔄 지표 · 시세 동기화',
+      mcAsof: at ? (at.getMonth() + 1) + '/' + at.getDate() + ' ' + String(at.getHours()).padStart(2, '0') + ':' + String(at.getMinutes()).padStart(2, '0') + ' 기준' : '',
+      mcHintOn: !!key, mcHint: key ? '지표로만 보면 달리오 4계절의 "' + SEA[key] + '"에 가까워요. 실업률 추세로 성장을, CPI 추세로 물가를 읽었어요. 최종 판단은 매미님이!' : '',
+      mcPickLabel: same ? '✓ 달리오 탭에 반영돼 있어요' : '달리오 탭에 이 계절로 반영', mcPick: () => { if (!key) return; this.sfx('click'); this.cycSet({ growth: growth, infl: infl }); }
+    };
+  }
   // ================= 원터치 시세 동기화 (Netlify 함수 /api/prices) =================
   pxSyncAvail() { try { if (window.claude && window.claude.use) return false; return /^https?:$/.test(location.protocol) && !/claude\.ai$|claudeusercontent/.test(location.hostname); } catch (e) { return false; } }
   pxSyncT() { try { return +(window.localStorage.getItem('hmm_px_sync') || 0); } catch (e) { return 0; } }
@@ -3778,6 +3823,7 @@ class Component extends DCLogic {
     if (this._pxSyncBusy) return; this._pxSyncBusy = true; this.setState({ pxSyncing: true, pxSyncMsg: auto ? '' : '야후 파이낸스에서 시세를 받아오는 중이에요…' });
     const done = (msg) => { this._pxSyncBusy = false; this.setState({ pxSyncing: false, pxSyncMsg: msg }); };
     let tk = []; try { tk = this.pxSyncTickers(); } catch (e) { }
+    this.mcSync();
     fetch('/api/prices?t=' + encodeURIComponent(tk.join(',')), { cache: 'no-store' }).then((r) => { if (!r.ok) throw new Error('http ' + r.status); const miss = r.headers.get('X-HMM-Missing') || ''; return r.text().then((txt) => [txt, miss]); }).then(([txt, miss]) => {
       try { window.localStorage.setItem('hmm_px_sync', String(Date.now())); } catch (e) { }
       const msg = this.pxBuild(txt, 'live-sync.csv'); if (!auto) this.sfx('coin');
@@ -4821,6 +4867,7 @@ class Component extends DCLogic {
     return {
       ...this.calVals(),
       isCycle: this.state.page === 'cycle', goCycle: () => { this.sfx('click'); this.setState({ page: 'cycle' }); },
+      ...this.mcVals(curTab),
       cycTabs: tabs.map((t) => ({ name: t[1], bg: curTab === t[0] ? '#7FD1C1' : 'transparent', fg: curTab === t[0] ? '#0E1729' : '#C3CDDD', pick: goTab(t[0]) })),
       cySum: S.tab === 'sum' || S.tab === 'marks', cyEgg: S.tab === 'egg', cyDalio: S.tab === 'dalio', cyCape: S.tab === 'cape',
       cyParts: parts.map((x) => ({ k: x.k, v: x.v, w: Math.round(x.d * 100) + '%', c: x.d >= 0.7 ? '#FF9B7A' : x.d >= 0.45 ? '#F3CF85' : '#8FD3B0' })), cyHasParts: parts.length > 0, cyNoParts: !parts.length, cySumTxt: sumTxt, cyGauge: gauge, cyGaugeC: avg === null ? '#5A6C8E' : avg >= 0.7 ? '#FF9B7A' : avg >= 0.45 ? '#F3CF85' : '#8FD3B0', cyGoDash: () => { this.sfx('click'); this.setState({ page: 'dash' }); }, cyGoShop: () => { this.sfx('click'); this.setState({ page: 'shop' }); },
