@@ -1,5 +1,5 @@
 // 헬로 미스터마켓 · 시세 동기화 (/api/prices) — 키 없음
-// 미국: 나스닥 일별 종가 + 배당 반영(배당락일 기준 과거가 조정) + 현재가 / 한국: 네이버 일별 종가 / 환율: Frankfurter(ECB)
+// 미국: 나스닥 일별 종가 + 현재가 (배당은 내장 데이터 기준일 이후 분만 빠짐 · 맥북 파일 업로드로 보정 가능) / 한국: 네이버 일별 종가 / 환율: Frankfurter(ECB)
 // 한 번에 최대 8종목 (앱이 여러 묶음으로 나눠 동시에 요청) · 최근 약 400일만 돌려줌 (그래프 이어 붙이기 · 52주 최저가 · 현재가용). 백테스팅은 앱에 내장된 장기 데이터를 그대로 씀.
 const KR_MAP = { KOFR: '449170' };
 const ETF = new Set(['SPY', 'QQQ', 'TQQQ', 'SOXL', 'SGOV', 'SCHD', 'JEPQ', 'XLV', 'XLF', 'XLE', 'XLI', 'VOO', 'VTI', 'IVV', 'TLT', 'IEF', 'SHY', 'BIL', 'GLD', 'IAU', 'SLV', 'DIA', 'IWM', 'VT', 'VXUS', 'EFA', 'EEM', 'JEPI', 'SPLG', 'QQQM', 'SMH', 'SOXX', 'XLK', 'XLY', 'XLP', 'XLU', 'XLB', 'XLRE', 'XLC', 'ARKK', 'UPRO', 'SQQQ', 'SPXL', 'BND', 'AGG', 'TMF', 'USD', 'SCHG', 'VUG', 'VIG', 'DGRO', 'COWZ']);
@@ -10,27 +10,22 @@ const mdy = (s) => { const m = String(s || '').match(/(\d{2})\/(\d{2})\/(\d{4})/
 const num = (s) => { const v = parseFloat(String(s == null ? '' : s).replace(/[$,]/g, '')); return isFinite(v) ? v : null; };
 async function j(url, ms = 6000, h = UA) { const r = await fetch(url, { headers: h, signal: AbortSignal.timeout(ms) }); if (!r.ok) throw new Error('http ' + r.status); return r.json(); }
 
+const T0 = { t: 0 };
 async function nasdaq(sym) {
   const from = iso(new Date(Date.now() - DAYS * 864e5));
   const order = ETF.has(sym) ? ['etf', 'stocks'] : ['stocks', 'etf'];
   for (const ac of order) {
     const q = encodeURIComponent(sym);
-    // 일별 종가 · 현재가 · 배당을 동시에 요청 (서버 시간 제한 10초 안에 끝내려고)
-    const [h, inf, dv] = await Promise.all([
-      j(`https://api.nasdaq.com/api/quote/${q}/historical?assetclass=${ac}&fromdate=${from}&limit=9999`, 6500).catch(() => null),
-      j(`https://api.nasdaq.com/api/quote/${q}/info?assetclass=${ac}`, 5000).catch(() => null),
-      j(`https://api.nasdaq.com/api/quote/${q}/dividends?assetclass=${ac}`, 5000).catch(() => null),
-    ]);
-    const rows = h?.data?.tradesTable?.rows; if (!rows || !rows.length) continue;
+    const h = await j(`https://api.nasdaq.com/api/quote/${q}/historical?assetclass=${ac}&fromdate=${from}&limit=9999`, 6000).catch(() => null);
+    const rows = h?.data?.tradesTable?.rows; if (!rows || !rows.length) { if (Date.now() - T0.t > 5000) return null; continue; }
     const m = new Map(); rows.forEach((r) => { const d = mdy(r.date), c = num(r.close); if (d && c > 0) m.set(d, c); });
     if (!m.size) continue;
-    try { const p = num(inf?.data?.primaryData?.lastSalePrice); const ts = String(inf?.data?.primaryData?.lastTradeTimestamp || ''); const dm = ts.match(/([A-Z][a-z]{2}) (\d{1,2}), (\d{4})/); if (p > 0 && dm) m.set(iso(new Date(`${dm[1]} ${dm[2]}, ${dm[3]} 12:00 UTC`)), p); } catch (e) { }
-    // 배당 반영: 배당락일 이전 가격을 (1 - 배당/전일종가)만큼 조정 → 야후 배당 조정 종가와 같은 방식
-    try {
-      const ds = (dv?.data?.dividends?.rows || []).map((r) => [mdy(r.exOrEffDate), num(r.amount)]).filter(([d, a]) => d && a > 0 && d >= from);
-      const dates = [...m.keys()].sort();
-      ds.forEach(([ex, amt]) => { const prev = dates.filter((d) => d < ex).pop(); if (!prev) return; const f = 1 - amt / m.get(prev); if (!(f > 0.5 && f < 1)) return; dates.forEach((d) => { if (d < ex) m.set(d, m.get(d) * f); }); });
-    } catch (e) { }
+    // 현재가(장중이면 오늘 값) — 서버 시간 제한(10초) 안에서만
+    const left = 8500 - (Date.now() - T0.t);
+    if (left > 1500) {
+      const inf = await j(`https://api.nasdaq.com/api/quote/${q}/info?assetclass=${ac}`, Math.min(3000, left - 500)).catch(() => null);
+      try { const p = num(inf?.data?.primaryData?.lastSalePrice); const ts = String(inf?.data?.primaryData?.lastTradeTimestamp || ''); const dm = ts.match(/([A-Z][a-z]{2}) (\d{1,2}), (\d{4})/); if (p > 0 && dm) m.set(iso(new Date(`${dm[1]} ${dm[2]}, ${dm[3]} 12:00 UTC`)), p); } catch (e) { }
+    }
     return m;
   }
   return null;
@@ -53,6 +48,7 @@ async function pool(items, n, fn) { const out = new Array(items.length); let i =
 export default async (req) => {
   const url = new URL(req.url);
   const extra = (url.searchParams.get('t') || '').toUpperCase().split(',').map((s) => s.trim()).filter((s) => /^[A-Z0-9][A-Z0-9.\-]{0,9}$/.test(s));
+  T0.t = Date.now();
   const list = [...new Set(extra)].slice(0, 8), wantFx = url.searchParams.get('fx') === '1';
   const [series, f] = await Promise.all([pool(list, 8, one), wantFx ? fx() : null]);
   const cols = [], miss = [];
