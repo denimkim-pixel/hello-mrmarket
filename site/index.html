@@ -3826,7 +3826,7 @@ class Component extends DCLogic {
     this.mcSync();
     const all = ['SPY', 'QQQ', 'TQQQ', 'SOXL', 'SGOV', 'SCHD', 'JEPQ', 'XLV', 'XLF', 'XLE', 'XLI', 'KOFR', '069500']; tk.forEach((x) => { if (all.indexOf(x) < 0) all.push(x); });
     const groups = []; for (let i = 0; i < all.length; i += 5) groups.push(all.slice(i, i + 5));
-    Promise.all(groups.map((g, gi) => fetch('/api/prices?t=' + encodeURIComponent(g.join(',')) + (gi === 0 ? '&fx=1' : ''), { cache: 'no-store' }).then((r) => (r.ok ? r.text().then((t) => [t, r.headers.get('X-HMM-Missing') || '']) : ['', g.join(',')])).catch(() => ['', g.join(',')]))).then((parts) => {
+    Promise.all(groups.map((g, gi) => fetch('/api/prices?s=' + encodeURIComponent(g.join(',')) + (gi === 0 ? '&fx=1' : ''), { cache: 'no-store' }).then((r) => (r.ok ? r.text().then((t) => [t, r.headers.get('X-HMM-Missing') || '']) : ['', g.join(',')])).catch(() => ['', g.join(',')]))).then((parts) => {
       const cols = [], byDate = {}, miss = [];
       parts.forEach(([t, m]) => { if (m) miss.push(m); if (!t) return; const L = t.replace(/^\uFEFF/, '').trim().split(/\r?\n/); const H = L[0].split(','); H.slice(1).forEach((h) => { if (cols.indexOf(h) < 0) cols.push(h); }); L.slice(1).forEach((ln) => { const c = ln.split(','), d = c[0]; byDate[d] = byDate[d] || {}; H.slice(1).forEach((h, i) => { if (c[i + 1] !== '') byDate[d][h] = c[i + 1]; }); }); });
       if (!cols.length || cols.indexOf('SPY') < 0) throw new Error('no data');

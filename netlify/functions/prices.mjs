@@ -48,7 +48,7 @@ async function pool(items, n, fn) { const out = new Array(items.length); let i =
 
 export default async (req) => {
   const url = new URL(req.url);
-  const extra = (url.searchParams.get('t') || '').toUpperCase().split(',').map((s) => s.trim()).filter((s) => /^[A-Z0-9][A-Z0-9.\-]{0,9}$/.test(s));
+  const extra = (url.searchParams.get('s') || url.searchParams.get('t') || '').toUpperCase().split(',').map((s) => s.trim()).filter((s) => /^[A-Z0-9][A-Z0-9.\-]{0,9}$/.test(s));
   T0.t = Date.now(); ERR.length = 0;
   const list = [...new Set(extra)].slice(0, 8), wantFx = url.searchParams.get('fx') === '1';
   const [series, f] = await Promise.all([pool(list, 8, one), wantFx ? fx() : null]);
