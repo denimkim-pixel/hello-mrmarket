@@ -109,13 +109,13 @@ input[type=range]{accent-color:#4FA3FF}
 <section aria-label="입문 코스" style="display: flex; flex-direction: column; gap: 12px; max-width: 760px; width: 100%; margin: 0 auto; padding-top: 4px">
 <div style="display: flex; gap: 12px; align-items: center; background: #FFFDF6; color: #1B2A44; border: 3px solid #1B2A44; border-radius: 16px; padding: 12px 14px; box-shadow: 4px 4px 0 #1B2A44">
 <img src="{{__a_feaf2288d6770e7df3dad2a29278ff40}}" alt="" style="width: 56px; height: 56px; border-radius: 50%; flex: 0 0 auto"></img>
-<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; font-weight: 800; color: #6B4FB8">🎓 주식 처음이라면 여기부터</span><span style="font-size: 20px; font-weight: 900; line-height: 1.3">첫 폭락에서 떠나지 않는 투자자 되기</span><span style="font-size: 13px; line-height: 1.5">수익률보다 먼저, 내가 얼마까지 떨어져도 버틸 수 있는지 알아보는 4단계 코스야.</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; font-weight: 800; color: #6B4FB8">🎓 주식 처음이라면 여기부터</span><span style="font-size: 20px; font-weight: 900; line-height: 1.3">첫 폭락에서 떠나지 않는 투자자 되기</span><span style="font-size: 13px; line-height: 1.5">수익률보다 먼저, 내가 얼마까지 떨어져도 버틸 수 있는지 알아보고 약속까지 하는 5단계 코스야.</span></div>
 </div>
 <div style="display: flex; flex-direction: column; gap: 6px; background: #16223A; border: 1px solid #26344F; border-radius: 14px; padding: 12px 14px">
 <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 800"><span>진행</span><span style="color: #C49BFF">{{stProg}}</span></div>
 <div style="height: 10px; border-radius: 5px; background: #0E1729; overflow: hidden"><div style="height: 100%; width: {{stProgW}}; background: linear-gradient(90deg, #C49BFF, #8FD3B0)"></div></div>
 </div>
-<sc-for list="{{stSteps}}" as="ss" hint-placeholder-count="4">
+<sc-for list="{{stSteps}}" as="ss" hint-placeholder-count="5">
 <div style="display: flex; gap: 12px; align-items: flex-start; background: #16223A; border: 2px solid {{ss.border}}; border-radius: 16px; padding: 14px">
 <div style="flex: 0 0 auto; width: 40px; height: 40px; border-radius: 50%; background: {{ss.nodeBg}}; color: #0E1729; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900">{{ss.mark}}</div>
 <div style="flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0">
@@ -130,7 +130,7 @@ input[type=range]{accent-color:#4FA3FF}
 <sc-if value="{{stGrad}}" hint-placeholder-val="{{ false }}">
 <div style="display: flex; flex-direction: column; gap: 8px; background: #1E2B47; border: 3px solid #FFE58A; border-radius: 16px; padding: 14px">
 <span style="font-size: 18px; font-weight: 900; color: #FFE58A">🎉 입문 코스 졸업!</span>
-<span style="font-size: 13px; color: #E8EDF5; line-height: 1.55">이제 내 낙폭 한도와 배분이 생겼어. 다음은 실제 계좌로 가는 길이야.</span>
+<span style="font-size: 13px; color: #E8EDF5; line-height: 1.55">이제 내 낙폭 한도, 배분, 약속서가 생겼어. 평소엔 정비일에만 들어오고, 흔들릴 땐 홈의 🧭 브리핑부터 봐.</span>
 <div style="display: flex; flex-wrap: wrap; gap: 6px"><button type="button" onClick="{{stGoShop}}" style="min-height: 38px; padding: 0 12px; border-radius: 10px; border: 0; background: #F3CF85; color: #0E1729; font: inherit; font-size: 13px; font-weight: 800; cursor: pointer">월말 정비소에서 내 계좌 점검 ▶</button><button type="button" onClick="{{stGoTutMap}}" style="min-height: 38px; padding: 0 12px; border-radius: 10px; border: 1px solid #C49BFF; background: transparent; color: #C49BFF; font: inherit; font-size: 13px; font-weight: 800; cursor: pointer">드라이빙 스쿨 나머지 코스 ▶</button></div>
 </div>
 </sc-if>
@@ -139,6 +139,73 @@ input[type=range]{accent-color:#4FA3FF}
 <span style="font-size: 12px; color: #8393AE; line-height: 1.6">투자 공방(정비소 · 시장 사이클 · 대가의 판정 · 실험실)은 내 배분이 정해진 다음에 쓰는 도구야. 지금 바로 열어 봐도 되지만, 입문 코스를 먼저 마치는 걸 추천해.</span>
 </div>
 <span style="font-size: 11px; color: #8393AE; line-height: 1.5; text-align: center">모든 숫자는 과거 데이터로 계산한 교육용 시뮬레이션이며 투자 권유가 아닙니다.</span>
+</section>
+</sc-if>
+<sc-if value="{{isPledge}}" hint-placeholder-val="{{ false }}">
+<section aria-label="나의 투자 약속서" style="display: flex; flex-direction: column; gap: 12px; max-width: 760px; width: 100%; margin: 0 auto; padding-top: 4px">
+<div style="display: flex; gap: 12px; align-items: center; background: #FFFDF6; color: #1B2A44; border: 3px solid #1B2A44; border-radius: 16px; padding: 12px 14px; box-shadow: 4px 4px 0 #1B2A44">
+<img src="{{__a_feaf2288d6770e7df3dad2a29278ff40}}" alt="" style="width: 52px; height: 52px; border-radius: 50%; flex: 0 0 auto"></img>
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 20px; font-weight: 900">📜 나의 투자 약속서</span><span style="font-size: 13px; line-height: 1.5">다짐은 마음이 차분할 때 해 두는 거야. 시장이 흔들리면 이 약속서를 제일 먼저 보여 줄게.</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px; background: #16223A; border: 1px solid #26344F; border-radius: 16px; padding: 14px">
+<span style="font-size: 15px; font-weight: 800">① 나는 이 돈을 무엇을 위해 투자하나요?</span>
+<input type="text" aria-label="투자하는 이유" value="{{plWhy}}" onChange="{{plOnWhy}}" placeholder="예: 10년 뒤 은퇴 생활비, 아이 대학 등록금" style="min-height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #3A4E74; background: #0E1729; color: #E8EDF5; font: inherit; font-size: 16px"></input>
+<span style="font-size: 15px; font-weight: 800; padding-top: 6px">② 고점 대비 여기까지는 팔지 않고 버틴다</span>
+<div style="display: flex; flex-wrap: wrap; gap: 6px"><sc-for list="{{plLims}}" as="pl" hint-placeholder-count="6"><button type="button" onClick="{{pl.pick}}" style="min-height: 38px; padding: 0 14px; border-radius: 19px; border: 1px solid #C49BFF; background: {{pl.bg}}; color: {{pl.fg}}; font: inherit; font-size: 15px; font-weight: 800; cursor: pointer">{{pl.name}}</button></sc-for></div>
+<span style="font-size: 12px; color: #9AA8BF">{{plLimHint}}</span>
+<span style="font-size: 15px; font-weight: 800; padding-top: 6px">③ 계좌를 열어 보는 정비일</span>
+<div style="display: flex; flex-wrap: wrap; gap: 6px"><sc-for list="{{plDays}}" as="pd" hint-placeholder-count="3"><button type="button" onClick="{{pd.pick}}" style="min-height: 38px; padding: 0 14px; border-radius: 19px; border: 1px solid #F3CF85; background: {{pd.bg}}; color: {{pd.fg}}; font: inherit; font-size: 14px; font-weight: 800; cursor: pointer">{{pd.name}}</button></sc-for></div>
+<span style="font-size: 15px; font-weight: 800; padding-top: 6px">④ 지킬 규칙 (눌러서 고르기)</span>
+<sc-for list="{{plRules}}" as="pr" hint-placeholder-count="4"><button type="button" onClick="{{pr.pick}}" style="display: flex; gap: 10px; align-items: center; text-align: left; min-height: 44px; padding: 8px 12px; border-radius: 10px; border: 1px solid {{pr.border}}; background: {{pr.bg}}; color: #E8EDF5; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer"><span style="font-size: 18px">{{pr.mark}}</span><span>{{pr.text}}</span></button></sc-for>
+<button type="button" onClick="{{plSave}}" style="margin-top: 6px; min-height: 48px; padding: 0 18px; border-radius: 12px; border: 0; background: #C49BFF; color: #0E1729; font: inherit; font-size: 16px; font-weight: 900; cursor: pointer">{{plSaveLabel}}</button>
+<sc-if value="{{plHasMsg}}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; font-weight: 800; color: #8FD3B0">{{plMsg}}</span></sc-if>
+</div>
+<sc-if value="{{plSigned}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 8px; background: #FFFDF6; color: #1B2A44; border: 3px solid #1B2A44; border-radius: 16px; padding: 16px; box-shadow: 4px 4px 0 #1B2A44">
+<span style="font-size: 12px; font-weight: 800; color: #6B4FB8">서명한 약속 · {{plDate}}</span>
+<sc-for list="{{plCard}}" as="pc" hint-placeholder-count="4"><span style="font-size: 15px; font-weight: 700; line-height: 1.55">{{pc.t}}</span></sc-for>
+<button type="button" onClick="{{goBrief}}" style="align-self: flex-start; margin-top: 4px; min-height: 40px; padding: 0 14px; border-radius: 10px; border: 2px solid #1B2A44; background: #FFE58A; color: #1B2A44; font: inherit; font-size: 14px; font-weight: 800; cursor: pointer">🧭 지금 운전 상태 보기 ▶</button>
+</div>
+</sc-if>
+</section>
+</sc-if>
+<sc-if value="{{isBrief}}" hint-placeholder-val="{{ false }}">
+<section aria-label="흔들릴 때 브리핑" style="display: flex; flex-direction: column; gap: 12px; max-width: 760px; width: 100%; margin: 0 auto; padding-top: 4px">
+<div style="display: flex; gap: 12px; align-items: center; background: {{brHeadBg}}; color: #1B2A44; border: 3px solid #1B2A44; border-radius: 16px; padding: 12px 14px; box-shadow: 4px 4px 0 #1B2A44">
+<img src="{{__a_feaf2288d6770e7df3dad2a29278ff40}}" alt="" style="width: 52px; height: 52px; border-radius: 50%; flex: 0 0 auto"></img>
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; font-weight: 800">🧭 흔들릴 때 브리핑 · {{brAsof}}</span><span style="font-size: 20px; font-weight: 900; line-height: 1.3">{{brTitle}}</span><span style="font-size: 13px; line-height: 1.5">{{brLead}}</span></div>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px">
+<div style="display: flex; flex-direction: column; gap: 4px; background: #16223A; border: 1px solid #26344F; border-radius: 14px; padding: 12px"><span style="font-size: 12px; color: #9AA8BF">시장 (SPY) 고점 대비</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 700; color: {{brSpyC}}">{{brSpy}}</span><span style="font-size: 11px; color: #8393AE">{{brSpyPk}}</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px; background: #16223A; border: 1px solid #26344F; border-radius: 14px; padding: 12px"><span style="font-size: 12px; color: #9AA8BF">내 배분 (사륜구동) 고점 대비</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 700; color: {{brPfC}}">{{brPf}}</span><span style="font-size: 11px; color: #8393AE">약속한 한도 {{brLim}}</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px; background: #16223A; border: 1px solid #26344F; border-radius: 14px; padding: 12px 14px">
+<span style="font-size: 12px; color: #9AA8BF">약속 한도까지</span>
+<div style="position: relative; height: 14px; border-radius: 7px; background: #0E1729; overflow: hidden"><div style="height: 100%; width: {{brGaugeW}}; background: {{brGaugeC}}"></div></div>
+<span style="font-size: 13px; font-weight: 800; color: {{brGaugeC}}">{{brGaugeTxt}}</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px; background: #16223A; border: 1px solid #26344F; border-radius: 14px; padding: 12px 14px">
+<span style="font-size: 14px; font-weight: 800">📚 과거엔 어땠을까</span>
+<span style="font-size: 13px; color: #C3CDDD; line-height: 1.6">{{brPast}}</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px; background: #1E2B47; border: 3px solid #FFE58A; border-radius: 14px; padding: 12px 14px">
+<span style="font-size: 14px; font-weight: 800; color: #FFE58A">✅ 오늘 할 일</span>
+<span style="font-size: 16px; font-weight: 800; line-height: 1.5">{{brTodo}}</span>
+<span style="font-size: 12px; color: #C3CDDD">{{brNext}}</span>
+</div>
+<sc-if value="{{brHasPledge}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 6px; background: #FFFDF6; color: #1B2A44; border: 3px solid #1B2A44; border-radius: 14px; padding: 12px 14px; box-shadow: 3px 3px 0 #1B2A44">
+<span style="font-size: 12px; font-weight: 800; color: #6B4FB8">📜 차분할 때의 내가 한 약속 · {{plDate}}</span>
+<sc-for list="{{plCard}}" as="pc" hint-placeholder-count="4"><span style="font-size: 14px; font-weight: 700; line-height: 1.5">{{pc.t}}</span></sc-for>
+</div>
+</sc-if>
+<sc-if value="{{brNoPledge}}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{goPledge}}" style="min-height: 40px; padding: 0 14px; border-radius: 10px; font: inherit; font-size: 14px; font-weight: 800; cursor: pointer; border: 1px solid #C49BFF; background: transparent; color: #C49BFF">📜 약속서를 아직 안 썼어요 · 지금 쓰기 ▶</button></sc-if>
+<div style="display: flex; flex-direction: column; gap: 8px; background: #16223A; border: 1px solid #5A3A44; border-radius: 14px; padding: 12px 14px">
+<span style="font-size: 14px; font-weight: 800">😣 그래도 팔고 싶다면</span>
+<span style="font-size: 13px; color: #C3CDDD; line-height: 1.6">{{brCoolTxt}}</span>
+<button type="button" onClick="{{brCool}}" style="min-height: 40px; padding: 0 14px; border-radius: 10px; font: inherit; font-size: 14px; font-weight: 800; cursor: pointer; align-self: flex-start; border: 1px solid #FF9B7A; background: transparent; color: #FF9B7A">{{brCoolBtn}}</button>
+</div>
+<span style="font-size: 11px; color: #8393AE; line-height: 1.5; text-align: center">과거 데이터로 계산한 교육용 정보이며 투자 권유가 아닙니다. 과거의 회복이 미래의 회복을 보장하지 않습니다.</span>
 </section>
 </sc-if>
 <sc-if value="{{isSet}}" hint-placeholder-val="{{ false }}">
@@ -998,6 +1065,8 @@ input[type=range]{accent-color:#4FA3FF}
 </sc-if>
 <sc-if value="{{isSummary}}" hint-placeholder-val="{{ false }}">
 <section aria-label="오늘의 요약" style="display: flex; flex-direction: column; gap: 12px; max-width: 760px; width: 100%; margin: 0 auto; padding-top: 4px">
+<button type="button" onClick="{{goBrief}}" style="display: flex; gap: 10px; align-items: center; text-align: left; width: 100%; min-height: 56px; padding: 10px 14px; border-radius: 14px; border: 2px solid {{brCardBorder}}; background: #16223A; color: #E8EDF5; font: inherit; cursor: pointer"><span style="font-size: 24px">{{brIcon}}</span><span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 900">{{brTitle}}</span><span style="font-size: 12px; color: #9AA8BF">{{brMini}}</span></span><span style="font-size: 13px; font-weight: 800; color: #FFE58A">브리핑 ▶</span></button>
+
 <div style="display: flex; gap: 12px; align-items: center">
 <img src="{{__a_feaf2288d6770e7df3dad2a29278ff40}}" alt="송매미" style="width: 56px; height: 56px; border-radius: 50%; border: 2px solid #C49BFF"></img>
 <div style="display: flex; flex-direction: column; gap: 2px">
@@ -3848,7 +3917,75 @@ class Component extends DCLogic {
       mcPickLabel: same ? '✓ 달리오 탭에 반영돼 있어요' : '달리오 탭에 이 계절로 반영', mcPick: () => { if (!key) return; this.sfx('click'); this.cycSet({ growth: growth, infl: infl }); }
     };
   }
-  // ================= 입문 코스 (주식 초보용 4단계) =================
+  // ================= 멘탈 코치: 약속서 · 흔들릴 때 브리핑 · 냉각 버튼 =================
+  plLoad() { if (!this._pl) { this._pl = {}; try { const r = window.localStorage.getItem('hmm_pledge_v1'); if (r) this._pl = JSON.parse(r) || {}; } catch (e) { } } return this._pl; }
+  plSaveObj(o) { this._pl = o; try { window.localStorage.setItem('hmm_pledge_v1', JSON.stringify(o)); } catch (e) { } }
+  plNextDay(day) {
+    const now = new Date(), y = now.getFullYear(), m = now.getMonth(), today = new Date(y, m, now.getDate());
+    const eom = (yy, mm) => new Date(yy, mm + 1, 0);
+    let t;
+    if (day === 'first') { t = new Date(y, m, 1); if (t < today) t = new Date(y, m + 1, 1); }
+    else if (day === 'q') { let mm = m; while ((mm + 1) % 3 !== 0) mm++; t = eom(y, mm); if (t < today) t = eom(y, mm + 3); }
+    else { t = eom(y, m); if (t < today) t = eom(y, m + 1); }
+    const days = Math.round((t - today) / 864e5);
+    return { t: t, days: days, txt: (t.getMonth() + 1) + '월 ' + t.getDate() + '일' + (days === 0 ? ' (오늘!)' : ' (' + days + '일 뒤)') };
+  }
+  coachSeries(i) { const e = this.data && this.data.usd && this.data.usd[i]; if (!e) return null; const v = e.v; let L = v.length - 1; while (L > 0 && (v[L] == null || !isFinite(v[L]))) L--; let pk = 0, pki = 0; for (let k = 0; k <= L; k++) if (v[k] != null && v[k] > pk) { pk = v[k]; pki = k; } return { v: v, L: L, pk: pk, pki: pki, dd: pk > 0 ? 1 - v[L] / pk : 0 }; }
+  coachPast(S, X) {
+    const v = S.v, out = []; let pk = 0, pki = 0, inEp = false, low = 0;
+    for (let k = 0; k <= S.L; k++) { const x = v[k]; if (x == null) continue; if (x >= pk) { if (inEp) { out.push({ months: (k - pki) / 21, depth: low, start: pki }); inEp = false; } pk = x; pki = k; low = 0; continue; } const d = 1 - x / pk; if (d > low) low = d; if (!inEp && d >= X) inEp = true; }
+    return out;
+  }
+  coachVals() {
+    const P = this.plLoad(), tu = this.state.tut || {};
+    const PROF = { '안전운전형': 15, '균형주행형': 25, '성장주행형': 30, '오프로드형': 35 };
+    const defLim = P.lim || PROF[tu.profType] || Math.max(10, Math.min(50, Math.round((this.state.ddLimit || 25) / 5) * 5));
+    const RULES = ['약속한 낙폭 한도 안에서는 팔지 않는다', '리밸런싱은 정비일에만 한다', '뉴스나 커뮤니티를 보고 그날 바로 사고팔지 않는다', '팔고 싶으면 24시간 기다린 뒤 다시 본다'];
+    const dr = this.state.plDraft || { why: P.why || '', lim: defLim, day: P.day || 'end', rules: P.rules || [true, true, true, true] };
+    const setDr = (o) => this.setState({ plDraft: Object.assign({}, dr, o), plMsg: '' });
+    const DAYS = [['end', '매달 말일'], ['first', '매달 1일'], ['q', '분기 말 (3·6·9·12월)']], dayName = (d) => (DAYS.find((x) => x[0] === d) || DAYS[0])[1];
+    const lim = (P.date ? P.lim : null) || defLim;
+    const card = P.date ? [{ t: '💰 나는 ' + (P.why ? '“' + P.why + '”을(를) 위해' : '오래 쓸 돈을 만들기 위해') + ' 투자한다.' }, { t: '🛡 고점 대비 −' + P.lim + '%까지는 팔지 않고 버틴다.' }, { t: '🗓 계좌는 ' + dayName(P.day) + '에만 열어 본다.' }].concat((P.rules || []).map((on, i) => (on ? { t: '✔ ' + RULES[i] + '.' } : null)).filter(Boolean)) : [];
+    // 데이터
+    const spy = this.coachSeries(0), pf = this.coachSeries(2);
+    const spyDD = spy ? spy.dd : 0, pfDD = pf ? pf.dd : 0, r = pfDD * 100 / lim * 100;
+    const lvl = spyDD < 0.05 && r < 40 ? 0 : r < 75 ? 1 : r < 100 ? 2 : 3;
+    const ICON = ['🟢', '🟡', '🟠', '🔴'], TITLE = ['평온한 도로 · 지켜보기만 하면 돼요', '흔들리는 도로 · 약속한 범위 안이에요', '한도에 가까워요 · 그래도 오늘은 팔지 않기', '약속한 한도를 넘었어요 · 정비일에 점검하기'];
+    const LEAD = ['시장이 조용해. 오늘은 앱을 닫고 하던 일 하러 가도 돼.', '조금 흔들리지만 네가 약속한 범위 안이야. 이런 흔들림은 해마다 여러 번 와.', '불안한 게 당연해. 하지만 약속한 선은 아직 안 넘었어. 오늘 결정은 내리지 말자.', '선을 넘었어. 그래도 오늘 한 번에 팔면 가장 비싼 실수가 될 수 있어. 정비일에 차분히 비중을 점검하자.'];
+    const TODO = ['아무것도 하지 않기. 앱을 닫고 하던 일 하기 🙂', '아무것도 팔지 않기. 뉴스는 오늘 하루 쉬기.', '아무것도 팔지 않기. 정비일에 방어 바퀴(SGOV · KOFR) 비중만 확인하기.', '오늘 당장 팔지 않기. 정비일에 정비소에서 약속한 비중으로 되돌리기 (파는 것보다 새 돈으로 채우는 것부터).'];
+    const nx = this.plNextDay(P.day || dr.day || 'end');
+    const X = spyDD >= 0.05 ? Math.floor(spyDD * 100) / 100 : 0.10;
+    let past = '과거 데이터를 불러오지 못했어요.';
+    if (spy) { const eps = this.coachPast(spy, X), m = eps.map((e) => e.months).sort((a, b) => a - b); if (m.length) { const med = m[Math.floor(m.length / 2)], mx = m[m.length - 1], lg = eps.reduce((a, e) => (e.months > a.months ? e : a), eps[0]), lgY = this.d && this.d[lg.start] ? String(this.d[lg.start]).slice(0, 4) + '년 고점에서 시작된 하락' : ''; past = '1993년 이후 SPY가 고점 대비 −' + Math.round(X * 100) + '% 이상 빠진 적은 ' + m.length + '번 있었고, 모두 결국 고점을 되찾았어. 고점을 다시 넘기까지 걸린 기간은 보통 ' + (med < 12 ? Math.max(1, Math.round(med)) + '개월' : (med / 12).toFixed(1) + '년') + ', 가장 길었던 때는 ' + (mx / 12).toFixed(1) + '년' + (lgY ? '(' + lgY + ')' : '') + '이었어. 버틴 사람에게는 회복이, 바닥에서 판 사람에게는 손실 확정이 남았어.'; } }
+    const lab = (S) => { try { return S && this.d && this.d[S.pki] ? this.label(S.pki) + ' 고점 기준' : '최근 고점 기준'; } catch (e) { return '최근 고점 기준'; } };
+    const pct = (x) => (x < 0.0005 ? '0.0%' : '−' + (x * 100).toFixed(1) + '%');
+    const col = (x) => (x < 0.05 ? '#8FD3B0' : x < 0.15 ? '#F3CF85' : '#FF9B7A');
+    const now = Date.now(), cu = P.coolUntil || 0, cooling = cu > now, cooled = cu && cu <= now;
+    const hhmm = (t) => { const d = new Date(t); return (d.getMonth() + 1) + '/' + d.getDate() + ' ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
+    const go = (pg) => () => { this.auUnlock(); this.sfx('click'); this.stop(); this.setState({ page: pg, navSub: false, titleSub: false }); };
+    return {
+      isPledge: this.state.page === 'pledge', isBrief: this.state.page === 'brief', goPledge: go('pledge'), goBrief: go('brief'),
+      plWhy: dr.why, plOnWhy: (e) => setDr({ why: String(e.target.value || '').slice(0, 60) }),
+      plLims: [10, 15, 20, 25, 30, 35, 40].map((n) => ({ name: '−' + n + '%', bg: dr.lim === n ? '#C49BFF' : 'transparent', fg: dr.lim === n ? '#0E1729' : '#C49BFF', pick: () => { this.sfx('click'); setDr({ lim: n }); } })),
+      plLimHint: '참고: SPY 100%는 2008년에 −55%, 2020년에 −34%, 2022년에 −25%까지 빠졌어. 내 배분이 이 한도를 넘지 않게 대시보드에서 확인해 봐.' + (tu.profType ? ' (입학 상담 결과: ' + tu.profType + ' · −' + (PROF[tu.profType] || 25) + '%)' : ''),
+      plDays: DAYS.map(([k, n]) => ({ name: n, bg: dr.day === k ? '#F3CF85' : 'transparent', fg: dr.day === k ? '#0E1729' : '#F3CF85', pick: () => { this.sfx('click'); setDr({ day: k }); } })),
+      plRules: RULES.map((t, i) => ({ text: t, mark: dr.rules[i] ? '☑' : '☐', bg: dr.rules[i] ? '#22304D' : 'transparent', border: dr.rules[i] ? '#C49BFF' : '#3A4E74', pick: () => { this.sfx('click'); const r2 = dr.rules.slice(); r2[i] = !r2[i]; setDr({ rules: r2 }); } })),
+      plSaveLabel: P.date ? '약속서 고쳐서 다시 서명' : '✍ 이대로 서명하기',
+      plSave: () => { this.sfx('coin'); const d = new Date(); const o = Object.assign({}, P, { why: (dr.why || '').trim(), lim: dr.lim, day: dr.day, rules: dr.rules, date: d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0') }); this.plSaveObj(o); this.stMark('pledge'); this.setState({ ddLimit: dr.lim, plDraft: null, plMsg: '서명 완료! 시장이 흔들리면 이 약속서를 먼저 보여 줄게.' }); },
+      plHasMsg: !!this.state.plMsg, plMsg: this.state.plMsg || '', plSigned: !!P.date, plDate: P.date || '', plCard: card,
+      brIcon: ICON[lvl], brTitle: TITLE[lvl], brLead: LEAD[lvl], brHeadBg: ['#DDF5E8', '#FFF3C4', '#FFE0C2', '#FFD3CC'][lvl], brCardBorder: ['#2F6B52', '#8A7440', '#B0703A', '#B04A4A'][lvl],
+      brMini: '시장 ' + pct(spyDD) + ' · 내 배분 ' + pct(pfDD) + ' · 한도 −' + lim + '% · 정비일 ' + nx.txt,
+      brAsof: (() => { try { return this.label(spy.L); } catch (e) { return ''; } })(),
+      brSpy: pct(spyDD), brSpyC: col(spyDD), brSpyPk: lab(spy), brPf: pct(pfDD), brPfC: col(pfDD), brLim: '−' + lim + '%',
+      brGaugeW: Math.min(100, Math.max(2, r)).toFixed(0) + '%', brGaugeC: ['#8FD3B0', '#F3CF85', '#FFA94D', '#FF6B6B'][lvl], brGaugeTxt: r >= 100 ? '한도를 넘었어요 (' + r.toFixed(0) + '%)' : '한도의 ' + r.toFixed(0) + '% 지점 · 남은 여유 ' + Math.max(0, lim - pfDD * 100).toFixed(1) + '%p',
+      brPast: past, brTodo: TODO[lvl], brNext: '다음 정비일: ' + nx.txt + ' · 그 전까지는 계좌를 열지 않아도 돼요.',
+      brHasPledge: !!P.date, brNoPledge: !P.date,
+      brCoolTxt: cooling ? '냉각 중이에요. ' + hhmm(cu) + ' 이후에 다시 생각해 보자. 그동안 위의 약속서와 과거 기록을 한 번만 더 읽어 봐.' : cooled ? '24시간이 지났어. 그래도 팔고 싶다면 한 번에 다 팔지 말고, 정비소에서 약속한 비중으로 맞추는 방법부터 확인해 보자.' : '지금 바로 팔지 말고 24시간만 기다려 보자. 버튼을 누르면 내일 이 시간에 다시 물어볼게. 대부분의 후회는 하루를 못 기다려서 생겨.',
+      brCoolBtn: cooling ? '⏳ 냉각 중 · 약 ' + Math.max(1, Math.ceil((cu - now) / 36e5)) + '시간 남음' : cooled ? '정비소에서 비중 점검 ▶' : '24시간 냉각 시작',
+      brCool: () => { this.sfx('click'); if (cooling) return; if (cooled) { const o = Object.assign({}, P); delete o.coolUntil; this.plSaveObj(o); this.setState({ page: 'shop' }); return; } const o = Object.assign({}, P, { coolUntil: Date.now() + 864e5 }); this.plSaveObj(o); this.setState({ plT: Date.now() }); }
+    };
+  }
+  // ================= 입문 코스 (주식 초보용 5단계) =================
   stLoad() { if (!this._st) { this._st = {}; try { const r = window.localStorage.getItem('hmm_course_v1'); if (r) this._st = JSON.parse(r) || {}; } catch (e) { } } return this._st; }
   stMark(k) { const c = this.stLoad(); if (c[k]) return; c[k] = Date.now(); try { window.localStorage.setItem('hmm_course_v1', JSON.stringify(c)); } catch (e) { } }
   startVals() {
@@ -3857,19 +3994,20 @@ class Component extends DCLogic {
     const pf = tu.profType && PROF[tu.profType] ? Object.assign({ type: tu.profType }, PROF[tu.profType]) : null;
     const openCourse = (n) => () => { this.auUnlock(); this.sfx('click'); this.stop(); this.setState({ page: 'tut', navSub: false, tut: Object.assign({}, this.state.tut, { view: 'course', course: n, step: 0, picks: {} }) }); };
     const pname = (id) => { const p = (this.presets || []).find((x) => x.id === id); return p ? (p.name || p.label || (id + '형')) : id + '형'; };
-    const s1 = !!d[0], s2 = !!(d[1] && d[2]), s3 = !!C.crash, s4 = !!C.alloc && !!pf;
+    const s1 = !!d[0], s2 = !!(d[1] && d[2]), s3 = !!C.crash, s4 = !!C.alloc && !!pf, s5 = !!(this.plLoad().date);
     const steps = [
       { tag: 'STEP 1 · 5분', title: '입학 상담: 나는 얼마까지 버틸까', desc: '송매미 교관과 몇 가지 질문에 답하면 내 운전 성향과 견딜 수 있는 낙폭 한도가 정해져.', done: s1, sub: pf ? '내 유형: ' + pf.type + ' · 낙폭 한도 −' + pf.lim + '%' : '', btn: s1 ? '다시 상담하기' : '상담 시작', go: openCourse(0) },
       { tag: 'STEP 2 · 10분', title: '낙폭의 수학: −50%면 +100%', desc: '수익률과 낙폭을 함께 읽는 법, 떨어진 만큼 되찾는 데 얼마나 걸리는지 버티기 게임으로 배워.', done: s2, sub: s2 ? '계기판 읽기 · 비포장도로 완료' : (d[1] ? '계기판 읽기 완료 · 비포장도로 남음' : ''), btn: s2 ? '다시 보기' : (d[1] ? '비포장도로 이어서' : '계기판 읽기 시작'), go: openCourse(d[1] && !d[2] ? 2 : 1) },
       { tag: 'STEP 3 · 5분', title: '폭락 체험: 그때 팔았다면?', desc: '1871년 이후 아무 달에나 태어나 투자 인생을 살아 봐. 폭락장에서 팔지 않고 버티면 어떻게 되는지 몸으로 겪어 보는 곳이야.', done: s3, sub: s3 ? '체험 완료 · 다른 시대로 또 태어나 봐도 돼' : '', btn: s3 ? '한 번 더 체험' : '투자 인생 시작', go: () => { this.auUnlock(); this.sfx('click'); this.stMark('crash'); this.stop(); this.setState({ page: 'game', navSub: false, game: Object.assign({}, this.state.game, { view: 'life' }) }); } },
-      { tag: 'STEP 4 · 2분', title: '내 배분 받기: 네 바퀴 정하기', desc: pf ? '상담 결과(' + pf.type + ', 낙폭 한도 −' + pf.lim + '%)에 맞는 사륜구동 배분을 대시보드에 바로 적용해서, 과거 위기 때 어땠는지 확인해.' : 'STEP 1 상담을 마치면 내 낙폭 한도에 맞는 사륜구동 배분을 받을 수 있어.', done: s4, sub: s4 ? '적용한 배분: ' + pname(pf.preset) : '', btn: !pf ? '먼저 STEP 1 상담' : s4 ? '대시보드에서 다시 보기' : '내 배분 적용하고 보기', go: () => { this.auUnlock(); if (!pf) { openCourse(0)(); return; } this.sfx('coin'); const p = (this.presets || []).find((x) => x.id === pf.preset); this.setState({ ddLimit: pf.lim }); if (p) this.loadPreset(p); this.stMark('alloc'); this.stop(); this.setState({ page: 'dash', navSub: false }); } }
+      { tag: 'STEP 4 · 2분', title: '내 배분 받기: 네 바퀴 정하기', desc: pf ? '상담 결과(' + pf.type + ', 낙폭 한도 −' + pf.lim + '%)에 맞는 사륜구동 배분을 대시보드에 바로 적용해서, 과거 위기 때 어땠는지 확인해.' : 'STEP 1 상담을 마치면 내 낙폭 한도에 맞는 사륜구동 배분을 받을 수 있어.', done: s4, sub: s4 ? '적용한 배분: ' + pname(pf.preset) : '', btn: !pf ? '먼저 STEP 1 상담' : s4 ? '대시보드에서 다시 보기' : '내 배분 적용하고 보기', go: () => { this.auUnlock(); if (!pf) { openCourse(0)(); return; } this.sfx('coin'); const p = (this.presets || []).find((x) => x.id === pf.preset); this.setState({ ddLimit: pf.lim }); if (p) this.loadPreset(p); this.stMark('alloc'); this.stop(); this.setState({ page: 'dash', navSub: false }); } },
+      { tag: 'STEP 5 · 3분', title: '졸업 약속서: 흔들릴 때의 나에게', desc: '차분한 지금, 왜 투자하는지 · 어디까지 버틸지 · 언제만 계좌를 볼지 적어 둬. 시장이 흔들리면 앱이 이 약속서를 먼저 보여 줘.', done: s5, sub: s5 ? '서명 완료 · ' + this.plLoad().date : '', btn: s5 ? '약속서 다시 보기' : '약속서 쓰기', go: () => { this.auUnlock(); this.sfx('click'); this.stop(); this.setState({ page: 'pledge', navSub: false }); } }
     ];
     const n = steps.filter((x) => x.done).length, nextI = steps.findIndex((x) => !x.done);
     return {
       isStart: this.state.page === 'start',
       stBg: this.state.page === 'start' ? '#C49BFF' : 'transparent', stFg: this.state.page === 'start' ? '#0E1729' : '#E8DDFF',
       goStart: () => { this.auUnlock(); this.sfx('click'); this.stop(); this.setState({ page: 'start', navSub: false, titleSub: false }); },
-      stProg: n + ' / 4 단계 완료', stProgW: (n / 4 * 100) + '%', stGrad: n === 4,
+      stProg: n + ' / 5 단계 완료', stProgW: (n / 5 * 100) + '%', stGrad: n === 5,
       stGoShop: () => { this.sfx('click'); this.setState({ page: 'shop' }); }, stGoTutMap: () => { this.sfx('click'); this.setState({ page: 'tut', tut: Object.assign({}, this.state.tut, { view: 'map' }) }); },
       stSteps: steps.map((x, i) => { const now = i === nextI; return { tag: x.tag, title: x.title, desc: x.desc, sub: x.sub, hasSub: !!x.sub, btn: x.btn, go: x.go, mark: x.done ? '✓' : String(i + 1),
         nodeBg: x.done ? '#8FD3B0' : now ? '#C49BFF' : '#3A4E74', border: now ? '#C49BFF' : x.done ? '#2F6B52' : '#26344F',
@@ -5688,7 +5826,7 @@ class Component extends DCLogic {
         const tr = (h, al) => 'rgba(' + parseInt(h.slice(1, 3), 16) + ',' + parseInt(h.slice(3, 5), 16) + ',' + parseInt(h.slice(5, 7), 16) + ',' + al + ')';
         const M = (name, desc, bg, go, extra) => Object.assign({ name: name, desc: desc, bg: tr(bg, extra && extra.ml ? 0.5 : 0.42), fg: '#0E1729', go: go, ml: '0', mh: '52px', fs: '18px', bw: '3px', sh: '4px 4px 0 #1B2A44', aria: 'false' }, extra || {});
         const open = !!this.state.titleSub;
-        const out = [M('🎓 입문 코스', '주식 처음이라면 여기부터 · 4단계', '#C49BFF', goP('start'), { mh: '60px', fs: '20px', bg: tr('#C49BFF', 0.75) }), M('홈', '오늘의 시장과 내 포트폴리오 한눈에', '#E8EDF5', goP('home')), M('대시보드', '사분면 레이스와 상세 분석', '#4FA3FF', goP('dash')),
+        const out = [M('🎓 입문 코스', '주식 처음이라면 여기부터 · 5단계', '#C49BFF', goP('start'), { mh: '60px', fs: '20px', bg: tr('#C49BFF', 0.75) }), M('홈', '오늘의 시장과 내 포트폴리오 한눈에', '#E8EDF5', goP('home')), M('대시보드', '사분면 레이스와 상세 분석', '#4FA3FF', goP('dash')),
           M(open ? '투자 공방 ▾' : '투자 공방 ▸', '졸업 후 추천 · 정비소 · 사이클 · 판정', '#F3CF85', () => { this.auUnlock(); this.sfx('click'); this.setState({ titleSub: !this.state.titleSub }); }, { aria: open ? 'true' : 'false' })];
         if (open) {
           const sub = { ml: '22px', mh: '44px', fs: '15px', bw: '2px', sh: '3px 3px 0 #1B2A44' };
@@ -6433,7 +6571,7 @@ class Component extends DCLogic {
     const gv = this.state.game.view, pg = this.state.page;
     const mkey = pg === 'game' && gv === 'sleep' ? 'none' : pg === 'game' && gv === 'dms' ? 'lobby' : pg === 'game' && gv === 'marathon' ? 'race' : pg === 'game' && gv === 'qtb' ? 'none' : pg === 'game' && gv === 'bags' ? 'arcade' : pg === 'game' && gv === 'catgame' ? 'arcade' : pg === 'game' ? (gv === 'play' ? (this.state.game.status === 'run' ? 'race' : 'arcade') : gv === 'shoot' ? (this.state.game.status === 'run' ? 'shoot' : 'arcade') : gv === 'life' ? 'life' : 'arcade') : pg === 'home' ? 'home' : pg === 'dash' ? 'dash' : pg === 'shop' ? 'shop' : pg === 'value' ? 'dash' : pg === 'ten' ? 'arcade' : pg === 'deadcat' || pg === 'cycle' ? 'dash' : pg === 'tut' ? 'tut' : 'title';
     if (!this.AU || this.AU.want !== mkey || !this.AU.timer) this.auMusic(mkey);
-    this.setLoad(); this.dmsSampleInit(); this.syncInit(); this.pxSyncAuto();
+    this.setLoad(); this.dmsSampleInit(); this.syncInit(); this.pxSyncAuto(); try { const P0 = this.plLoad(); if (P0.date && P0.lim) this.state.ddLimit = P0.lim; } catch (e) { }
     if (!this._dwLoaded) { this._dwLoaded = true; try { const raw = window.localStorage && window.localStorage.getItem('hmm_dash_w_v1'); if (raw) { const d = JSON.parse(raw); if (d && d.w) { this.buildData(d.w); this.state.applied = d.w; this.state.preset = d.p || null; this.state.form = Object.assign({}, this.state.form, { wt: Object.assign({}, d.w) }); } } } catch (e) { } }
     { const js = JSON.stringify({ w: this.state.applied, p: this.state.preset }); if (js !== this._dwSaved) { this._dwSaved = js; try { window.localStorage && window.localStorage.setItem('hmm_dash_w_v1', js); } catch (e) { } } }
     if (this._setPreset) { const p = this.presets.find((x) => x.id === this._setPreset); this._setPreset = null; if (p) { const w = Object.assign({}, p.w); this.buildData(w); this.state.applied = w; this.state.preset = p.id; this.state.form = Object.assign({}, this.state.form, { wt: Object.assign({}, w) }); } }
@@ -6441,7 +6579,7 @@ class Component extends DCLogic {
     { const tu0 = this.state.tut, keep = {}; Object.keys(tu0).forEach((k) => { if (['view', 'course', 'step', 'picks'].indexOf(k) < 0) keep[k] = tu0[k]; }); const js = JSON.stringify(keep); if (js !== this._tutSaved) { this._tutSaved = js; try { window.localStorage && window.localStorage.setItem('hmm_tut_v1', js); } catch (e) { } } }
     if (this._sdoc) this.syncKick();
     try { if (['shop', 'value', 'ten', 'deadcat', 'cycle'].indexOf(this.state.page) >= 0 && this._lastTool !== this.state.page) { this._lastTool = this.state.page; window.localStorage.setItem('hmm_last_tool', this.state.page); } } catch (e) { }
-    const TV = Object.assign(this.startVals(), this.fdVals(), this.tutVals(), this.lifeVals(), this.summaryVals(), this.slVals(), this.tourVals(), this.impVals(), this.bgVals(), this.mrVals(), this.qbVals(), this.setVals(), (this.state.page === 'game' ? this.dmsVals() : { gDms: false, openDms: () => { this.sfx('click'); this.setState({ page: 'game', game: Object.assign({}, this.state.game, { view: 'dms' }) }); } }), (() => { const t = this.dashWheelTg(); return { dTgC: t['코어'], dTgD: t['방어'], dTgI: t['인컴'], dTgS: t['전략'] }; })(), { avOn: !!this.state.avOn, avOff: !this.state.avOn, avMsg: this.state.avMsg || '', avHasMsg: !!this.state.avMsg, avRefresh: () => { this.sfx('click'); this.avRefreshHoldings(); }, dGoShop: () => { this.sfx('click'); this.setState({ page: 'shop' }); } }, this.state.page === 'shop' ? this.shopVals() : {}, this.state.page === 'value' ? this.valVals() : {}, this.state.page === 'ten' ? Object.assign(this.tenVals(), this.labVals()) : {}, this.state.page === 'deadcat' ? this.dcVals() : {}, this.state.page === 'cycle' || this.state.page === 'deadcat' ? this.cycVals() : { isCycle: false, goCycle: () => { this.sfx('click'); this.setState({ page: 'cycle' }); } }, this.state.page === 'value' ? Object.assign(this.scrVals(), this.vMapVals()) : {}, this.state.page === 'ten' ? Object.assign({}, this.scrTenVals()) : {}, this.state.page === 'game' && this.state.game.view === 'catgame' ? this.cbVals() : {});
+    const TV = Object.assign(this.startVals(), this.coachVals(), this.fdVals(), this.tutVals(), this.lifeVals(), this.summaryVals(), this.slVals(), this.tourVals(), this.impVals(), this.bgVals(), this.mrVals(), this.qbVals(), this.setVals(), (this.state.page === 'game' ? this.dmsVals() : { gDms: false, openDms: () => { this.sfx('click'); this.setState({ page: 'game', game: Object.assign({}, this.state.game, { view: 'dms' }) }); } }), (() => { const t = this.dashWheelTg(); return { dTgC: t['코어'], dTgD: t['방어'], dTgI: t['인컴'], dTgS: t['전략'] }; })(), { avOn: !!this.state.avOn, avOff: !this.state.avOn, avMsg: this.state.avMsg || '', avHasMsg: !!this.state.avMsg, avRefresh: () => { this.sfx('click'); this.avRefreshHoldings(); }, dGoShop: () => { this.sfx('click'); this.setState({ page: 'shop' }); } }, this.state.page === 'shop' ? this.shopVals() : {}, this.state.page === 'value' ? this.valVals() : {}, this.state.page === 'ten' ? Object.assign(this.tenVals(), this.labVals()) : {}, this.state.page === 'deadcat' ? this.dcVals() : {}, this.state.page === 'cycle' || this.state.page === 'deadcat' ? this.cycVals() : { isCycle: false, goCycle: () => { this.sfx('click'); this.setState({ page: 'cycle' }); } }, this.state.page === 'value' ? Object.assign(this.scrVals(), this.vMapVals()) : {}, this.state.page === 'ten' ? Object.assign({}, this.scrTenVals()) : {}, this.state.page === 'game' && this.state.game.view === 'catgame' ? this.cbVals() : {});
     return Object.assign(TV, {
       auUnlock: () => this.auUnlock(), soundOn: this.state.sound, soundLabel: '', soundOff: !this.state.sound, soundAria: this.state.sound ? '소리 켜짐 (누르면 끄기)' : '소리 꺼짐 (누르면 켜기)',
       toggleSound: () => { this.auUnlock(); this.auSetSound(!this.state.sound); },
